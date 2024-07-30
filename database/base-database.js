@@ -7,30 +7,61 @@ class BaseDatabase {
     this.filename = model.name;
   }
   save(objects) {
-    fs.writeFileSync(`./${this.filename}.json`, flatted.stringify(objects));
+    return new Promise((resolve, reject) => {
+      fs.writeFile(
+        `./${this.filename}.json`,
+        flatted.stringify(objects, null, 2),
+        (err) => {
+          if (err) return reject(err);
+          resolve();
+        }
+      );
+    });
   }
 
   load() {
-    const file = fs?.readFileSync(`./${this.filename}.json`, "utf8");
+    return new Promise((resolve, reject) => {
+      fs.readFile(`./${this.filename}.json`, "utf8", (err, file) => {
+        if (err) return reject(err);
 
-    const objects = flatted.parse(file);
+        const objects = flatted.parse(file);
 
-    return objects?.map(this.model.create);
+        resolve(objects.map(this.model.create));
+      });
+    });
   }
 
-  insert(object) {
-    const objects = this.load();
-    this.save(objects?.concat(object));
+  async insert(object) {
+    const objects = await this.load();
+
+    if (!(object instanceof this.model)) {
+      object = this.model.create(object);
+    }
+    await this.save(objects?.concat(object));
+    return object;
   }
 
-  remove(index) {
-    const objects = this.load();
+  async remove(index) {
+    const objects = await this.load();
     objects?.splice(index, 1);
-    this.save(objects);
+    await this.save(objects);
   }
 
-  update(object) {
-    const objects = this.load();
+  async removeBy(property, value) {
+    const objects = await this.load();
+
+    const index = objects.findIndex((o) => o[property] == value);
+    if (index == -1)
+      throw new Error(
+        `Cannot find ${this.model.name} instance with ${property} ${value}`
+      );
+
+    objects.splice(index, 1);
+    await this.save(objects);
+  }
+
+  async update(object) {
+    const objects = await this.load();
 
     const index = objects.findIndex((o) => o.id == object.id);
 
@@ -40,10 +71,16 @@ class BaseDatabase {
       );
 
     objects.splice(index, 1, object);
-    this.save(objects);
+    await this.save(objects);
   }
-  findBy(property, value) {
-    return this.load().find((o) => o[property] == value);
+
+  async find(id) {
+    const objects = await this.load();
+    return objects.find((o) => o.id == id);
+  }
+
+  async findBy(property, value) {
+    return (await this.load()).find((o) => o[property] == value);
   }
 }
 

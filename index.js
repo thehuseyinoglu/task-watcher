@@ -2,13 +2,17 @@ const User = require("./models/User");
 const userDatabase = require("./database/user-database");
 const roomDatabase = require("./database/room-database");
 
-const berkay = userDatabase.findBy("userName", "Berkay");
-const nagihan = userDatabase.findBy("userName", "Nagihan");
+async function main() {
+  try {
+    const berkay = await userDatabase.findBy("userName", "Berkay");
+    const nagihan = await userDatabase.findBy("userName", "Nagihan");
 
-const room1 = roomDatabase.findBy("name", "Room1");
+    const room1 = await roomDatabase.findBy("name", "Room1");
 
-room1.addUser(nagihan);
+    console.log(room1);
+  } catch (error) {
+    return console.log(error);
+  }
+}
 
-roomDatabase.update(room1);
-
-console.log(room1);
+main();
