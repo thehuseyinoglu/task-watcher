@@ -1,5 +1,5 @@
 const BaseDatabase = require('./base-database')
-const User = require('../User')
+const User = require('../models/User')
 
 class UserDatabase extends BaseDatabase{}
 

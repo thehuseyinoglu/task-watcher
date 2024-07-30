@@ -1,23 +1,14 @@
-const User = require('./User')
-const userDatabase = require('./database/user-database')
+const User = require("./models/User");
+const userDatabase = require("./database/user-database");
+const roomDatabase = require("./database/room-database");
 
+const berkay = userDatabase.findBy("userName", "Berkay");
+const nagihan = userDatabase.findBy("userName", "Nagihan");
 
-// const berkay = new User(undefined,'Berkay')
-// const nagihan = new User(undefined,'Nagihan')
-// userDatabase.save([berkay,nagihan])
+const room1 = roomDatabase.findBy("name", "Room1");
 
+room1.addUser(nagihan);
 
+roomDatabase.update(room1);
 
-
-//  const users = userDatabase.load()
-
-const berkay = userDatabase.findBy( 'userName','Berkay')
-
-
-berkay.createRoom('2.room')
-
-userDatabase.update(berkay)
-
-console.log(berkay)
-
-
+console.log(room1);

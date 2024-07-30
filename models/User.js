@@ -1,4 +1,4 @@
-const Room = require("./room");
+const Room = require("../models/room");
 const uuid = require("uuid");
 
 class User {
@@ -11,13 +11,6 @@ class User {
   createRoom(name) {
     const room = new Room(name, this);
     this.rooms.push(room);
-  }
-  addUserToRoom(room, user) {
-    if (room.roomAdmin == this.name) {
-      room.addUser(user);
-    } else {
-      console.log("Kullanıcı eklenemedi");
-    }
   }
 
   static create({id, userName, rooms, tasks}) {
