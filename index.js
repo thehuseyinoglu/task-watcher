@@ -1,18 +1,20 @@
-const User = require("./models/User");
-const userDatabase = require("./database/user-database");
-const roomDatabase = require("./database/room-database");
+const express = require("express");
+var bodyParser = require("body-parser");
 
-async function main() {
-  try {
-    const berkay = await userDatabase.findBy("userName", "Berkay");
-    const nagihan = await userDatabase.findBy("userName", "Nagihan");
+const usersRouter = require("./routes/users")
+const indexRouter = require("./routes/index")
+require("./mongo-connection")
 
-    const room1 = await roomDatabase.findBy("name", "Room1");
+const app = express();
 
-    console.log(room1);
-  } catch (error) {
-    return console.log(error);
-  }
-}
+app.set("view engine", "pug");
+app.use(bodyParser.json()); // gönderilen isteğin okunabilmesi için gerekli bir durum yoksa express okumuyor
 
-main();
+app.use("/users",usersRouter)
+app.use("/",indexRouter)
+
+
+
+app.listen(3000, () => {
+  console.log("started");
+});

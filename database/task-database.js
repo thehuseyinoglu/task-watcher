@@ -1,5 +1,5 @@
 const BaseDatabase = require("./base-database");
-const Task = require("../task");
+const Task = require("../models/task");
 
 class TaskDatabase extends BaseDatabase {}
 

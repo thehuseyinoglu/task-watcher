@@ -37,7 +37,9 @@ class BaseDatabase {
     if (!(object instanceof this.model)) {
       object = this.model.create(object);
     }
+
     await this.save(objects?.concat(object));
+
     return object;
   }
 

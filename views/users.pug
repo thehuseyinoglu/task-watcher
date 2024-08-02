@@ -1,0 +1,9 @@
+extends layout
+block content
+   h1 Uygulamadaki kullanıcılar 
+   p There are #{users.length} users
+        
+   ol
+     each user in users
+      li 
+        a(href =`/users/${user.id}`) #{user.userName}
