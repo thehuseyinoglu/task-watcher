@@ -1,18 +1,10 @@
-const uuid = require("uuid");
+const mongoose = require("mongoose");
 
-class Room {
-  constructor(id = uuid.v4(), name, roomAdmin, users = []) {
-    this.id = id;
-    this.name = name;
-    this.roomAdmin = roomAdmin;
-    this.users = users;
-  }
-  addUser(user) {
-    this.users.push(user);
-  }
+const RoomSchema = new mongoose.Schema({
+  name: String,
+  owner: String,
+  users: [],
+  tasks:[]
+});
 
-  static create({ id, name, roomAdmin, users }) {
-    return new Room(id, name, roomAdmin, users);
-  }
-}
-module.exports = Room;
+module.exports = mongoose.model("Room", RoomSchema);

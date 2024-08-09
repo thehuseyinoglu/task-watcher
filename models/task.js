@@ -1,16 +1,15 @@
-const uuid = require("uuid");
+const mongoose = require("mongoose");
 
-class Task {
-  constructor(id = uuid.v4(), taskTitle, room, taskOwner, taskDescription) {
-    this.id = id;
-    this.taskTitle = taskTitle;
-    this.room = room;
-    this.taskOwner = taskOwner;
-    this.taskDescription = taskDescription;
-  }
+const TaskSchema = mongoose.Schema({
+  name: String,
+  description: String,
+  room: {},
+  taskOwner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    autopopulate: {maxDepth:
+    1},
+  },
+});
 
-  static create({ id, taskTitle, room, taskOwner, taskDescription }) {
-    return new Task(id, taskTitle, room, taskOwner, taskDescription);
-  }
-}
-module.exports = Task;
+module.exports = mongoose.model("Task", TaskSchema);

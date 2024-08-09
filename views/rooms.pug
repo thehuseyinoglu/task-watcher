@@ -1,0 +1,9 @@
+extends layout
+block content
+   h1 Uygulamadaki Odalar d
+   p There are #{rooms.length} users
+        
+   ol
+     each room in rooms
+      li 
+        span #{room.name} #{room.id}

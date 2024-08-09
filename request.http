@@ -1,0 +1,82 @@
+POST http://localhost:3000/users HTTP/1.1
+content-type: application/json
+
+{"name":"Fahri"}
+
+###
+
+GET http://localhost:3000/users/66b3270b7d4d129d0f84950e HTTP/1.1
+
+###
+DELETE http://localhost:3000/users/66acd81396990c8b53d26b7e HTTP/1.1
+
+###
+PATCH http://localhost:3000/users/66b5f453f96e16136d5059d8 HTTP/1.1
+content-type: application/json
+
+{"name": "Fahri Nazmi"}
+
+
+# ----------
+
+### user üzerinden task olusturma isteği atıyorum
+POST http://localhost:3000/users/66b36f6901a5179551990f88/task HTTP/1.1
+content-type: application/json
+
+{"name":"rap", "description":"rap yapmak", 
+"room": "66b370a36f30023cdc9cd1f9","ownerId":"66b5f453f96e16136d5059d8"}
+
+
+ 
+###Tasks
+POST http://localhost:3000/tasks HTTP/1.1
+content-type: application/json
+
+{"name":"new task", "description":"değişebilir her an adres", 
+"room": "66b370a36f30023cdc9cd1f9","owner":"66b3270b7d4d129d0f84950e"}
+
+###Tasks
+GET http://localhost:3000/tasks HTTP/1.1
+
+###Task
+GET http://localhost:3000/tasks/66b3270b7d4d129d0f84950e HTTP/1.1
+
+###task delete
+DELETE http://localhost:3000/tasks/66acd81396990c8b53d26b7e HTTP/1.1
+
+
+
+###Room
+POST http://localhost:3000/rooms HTTP/1.1
+content-type: application/json
+
+{"name":"new Room","owner":"66b370581f9cda89ffd87f27"}
+
+###rooms
+GET http://localhost:3000/rooms HTTP/1.1
+
+###room
+GET http://localhost:3000/rooms/66b370a36f30023cdc9cd1f9 HTTP/1.1
+
+###room delete
+DELETE http://localhost:3000/rooms/66acd81396990c8b53d26b7e HTTP/1.1
+
+
+
+###---------------------
+
+###
+DELETE http://localhost:3000/drivers/5ea70bf063b0877147bd3e6b HTTP/1.1
+
+###
+POST http://localhost:3000/passengers/5ea70b28bbf7cb710503f2d4/bookings HTTP/1.1
+content-type: application/json
+
+{"driverId": "5ea724416e3b607ac41df63a", "origin": "Kabatas", "destination": "Pendik"}
+
+###
+
+PATCH http://localhost:3000/drivers/5ea70c8063b0877147bd3e6c HTTP/1.1
+content-type: application/json
+
+{"name": "a newer surname"}
