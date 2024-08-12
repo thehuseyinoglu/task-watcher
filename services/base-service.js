@@ -1,9 +1,9 @@
-class BaseDatabase {
+class BaseService {
   constructor(model) {
     this.model = model;
   }
   async save(objects) {
-    return this.model.insertMany(objects);
+    return  await this.model.insertMany(objects);
   }
 
   async load() {
@@ -12,7 +12,7 @@ class BaseDatabase {
 
   async insert(object) {
     const instance = await this.model.create(object);
-    return instance
+    return instance;
   }
 
   async removeBy(property, value) {
@@ -27,9 +27,17 @@ class BaseDatabase {
     return this.model.findById(id);
   }
 
+  async query(obj) {
+    return this.model.find(obj);
+  }
+
+  async queryWithProjection(projection) {
+    return await this.model.find({}, projection);
+  }
+
   async findBy(property, value) {
     return this.model.find({ [property]: value });
   }
 }
 
-module.exports = BaseDatabase;
+module.exports = BaseService;

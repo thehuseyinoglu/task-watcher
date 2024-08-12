@@ -1,5 +1,7 @@
 const express = require("express");
 var bodyParser = require("body-parser");
+const cors = require('cors');
+
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -11,6 +13,7 @@ const app = express();
 
 app.set("view engine", "pug");
 app.use(bodyParser.json()); // gönderilen isteğin okunabilmesi için gerekli bir durum yoksa express okumuyor
+app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

@@ -1,25 +1,32 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    minLength: 2,
+  },
+  age: {
+    type: Number,
+    required:true,
+    min: 10,
+  },
   rooms: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref:'Room',
-      autopopulate:true
-    }
+      ref: "Room",
+      autopopulate: { maxDepth: 1 },
+    },
   ],
   tasks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref:'Task',
-      autopopulate: {maxDepth:1},
-    }
+      ref: "Task",
+      autopopulate: { maxDepth: 2 },
+    },
   ],
 });
 
-
-UserSchema.plugin(require('mongoose-autopopulate'));
-
+UserSchema.plugin(require("mongoose-autopopulate"));
 
 module.exports = mongoose.model("User", UserSchema);
