@@ -1,7 +1,7 @@
 const User = require("./models/User");
 const Room = require("./models/room");
-const userDatabase = require("./database/user-database");
-const roomDataBase = require("./database/room-database");
+const userService = require("./services/user-service");
+const roomDataBase = require("./services/room-service");
 
 const berkay = new User(undefined, "Berkay");
 const nagihan = new User(undefined, "Nagihan");
@@ -11,7 +11,7 @@ room1.addUser(nagihan);
 
 async function main() {
   try {
-    await userDatabase.save([berkay, nagihan]);
+    await userService.save([berkay, nagihan]);
 
     await roomDataBase.save([room1]);
 

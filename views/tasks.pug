@@ -1,0 +1,9 @@
+extends layout
+block content
+   h1 Uygulamadaki Odalar d
+  
+        
+   ol
+     each task in tasks
+      li 
+        span #{task.name} #{task._id}

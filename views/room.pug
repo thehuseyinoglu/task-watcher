@@ -1,0 +1,8 @@
+extends layout
+block content
+ h1 room Detail
+ p #{room.name}
+ ol
+  each user in room.users
+   li 
+    span #{user.name} 

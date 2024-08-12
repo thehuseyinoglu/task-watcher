@@ -1,18 +1,25 @@
-const uuid = require("uuid");
+const mongoose = require("mongoose");
 
-class Room {
-  constructor(id = uuid.v4(), name, roomAdmin, users = []) {
-    this.id = id;
-    this.name = name;
-    this.roomAdmin = roomAdmin;
-    this.users = users;
-  }
-  addUser(user) {
-    this.users.push(user);
-  }
+const RoomSchema = new mongoose.Schema({
+  name: { type: String, required: true, minlegth: 3 },
+  owner: {
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'User',
+    autopopulate: { maxDepth: 1 },
+  },
+  users: [{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'User',
+    autopopulate: { maxDepth: 2 },
+  }],
+  tasks: [
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'Task',
+      autopopulate: { maxDepth: 2 },
+    }
+  ],
+});
 
-  static create({ id, name, roomAdmin, users }) {
-    return new Room(id, name, roomAdmin, users);
-  }
-}
-module.exports = Room;
+RoomSchema.plugin(require("mongoose-autopopulate"));
+module.exports = mongoose.model("Room", RoomSchema);

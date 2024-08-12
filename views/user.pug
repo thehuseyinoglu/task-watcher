@@ -1,4 +1,8 @@
 extends layout
 block content
  h1 User Detail
- p #{user.userName}
+ p #{user.name}
+ ol
+  each task in user.tasks 
+   li 
+    span #{user.name}, #{task.room.name} odasında #{task.name} taskına sahip

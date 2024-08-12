@@ -1,0 +1,70 @@
+POST http://localhost:3000/users HTTP/1.1
+content-type: application/json
+
+{"name":"Yusuf","age":42}  
+
+###
+
+GET http://localhost:3000/users/66b3270b7d4d129d0f84950e HTTP/1.1
+
+###
+DELETE http://localhost:3000/users/66b9ae11e6dcaac9b419e5bd HTTP/1.1
+
+###
+PATCH http://localhost:3000/users/66b9e84e11006bc2188aaca8 HTTP/1.1
+content-type: application/json
+
+{"name": "yusuf besim"}
+###
+
+PATCH http://localhost:3000/rooms/66b9ffb153f9a5c62c517e48 HTTP/1.1
+content-type: application/json
+
+{"name": "ambeleyav"}
+
+
+# ----------
+
+### task üzerinden task olusturma isteği atıyorum
+POST http://localhost:3000/tasks HTTP/1.1
+content-type: application/json
+
+{"name":"berkayın task", "description":"rap yapmak", 
+"room": "66b9ffb153f9a5c62c517e48","ownerId":"66b9e82f11006bc2188aaca2"}
+
+
+###taskların hepsini getir
+GET http://localhost:3000/tasks HTTP/1.1
+
+###Taskın detailini getir
+GET http://localhost:3000/tasks/66b3270b7d4d129d0f84950e HTTP/1.1
+###
+
+###task delete
+DELETE http://localhost:3000/tasks/66b9ffd053f9a5c62c517e5b HTTP/1.1
+
+
+
+###Room
+POST http://localhost:3000/rooms HTTP/1.1
+content-type: application/json
+
+{"name":"Berkay's Room","ownerId":"66b9e82f11006bc2188aaca2"}
+
+###rooms
+GET http://localhost:3000/rooms HTTP/1.1
+
+###room
+GET http://localhost:3000/rooms/66b370a36f30023cdc9cd1f9 HTTP/1.1
+
+###room delete
+DELETE http://localhost:3000/rooms/66acd81396990c8b53d26b7e HTTP/1.1
+
+
+###Room
+POST http://localhost:3000/rooms/add-user HTTP/1.1
+content-type: application/json
+
+{"roomId":"66b9ffb153f9a5c62c517e48","userId":"66b9e82511006bc2188aaca0"}
+
+###---------------------
