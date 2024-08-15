@@ -1,12 +1,15 @@
 const express = require("express");
 var bodyParser = require("body-parser");
 const cors = require('cors');
+require('dotenv').config();
+
 
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const tasksRouter = require("./routes/task");
 const roomsRouter = require("./routes/room");
+const authRouter = require("./routes/auth");
 require("./mongo-connection");
 
 const app = express();
@@ -19,6 +22,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/tasks", tasksRouter);
 app.use("/rooms", roomsRouter);
+app.use("/auth",authRouter)
 
 app.listen(3000, () => {
   console.log("started");

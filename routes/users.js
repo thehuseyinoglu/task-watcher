@@ -1,63 +1,81 @@
+const authMiddleware = require("../middleware/auth-middleware");
+const createResponse = require("../utils/response-helper");
 const { userService } = require("../services");
 
 const router = require("express").Router();
 
-router.get("/", async (req, res) => {
-  const users = await userService.load();
+router.use(authMiddleware);
 
-  res.render("users", { users }); // sayfanın render edebilmesi için gerekli bir şey
+
+router.get("/", async (req, res) => {
+  try {
+    const users = await userService.load();
+    res.status(200).json(createResponse(200, "Başarılı", { users }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 router.get("/young-users", async (req, res) => {
-  const users = await userService.findYoungUsers();
-  res.render("users", { users });
+  try {
+    const users = await userService.findYoungUsers();
+    res.status(200).json(createResponse(200, "Başarılı", { users }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 router.get("/simple-name", async (req, res) => {
-  const users = await userService.queryWithProjection({ rooms: 0, tasks: 0 });
-  res.send(users);
-});
-
-router.post("/", async (req, res) => {
-  const user = await userService.insert(req.body);
-
-  res.send(user);
+  try {
+    const users = await userService.queryWithProjection({ rooms: 0, tasks: 0 });
+    res.status(200).json(createResponse(200, "Başarılı", { users }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 router.delete("/:userId", async (req, res) => {
-  await userService.removeBy("_id", req.params.userId);
-
-  res.send("ok");
+  try {
+    await userService.removeBy("_id", req.params.userId);
+    res.status(200).json(createResponse(200, "Başarılı"));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "İşlem başarısız oldu", {}, [error.message]));
+  }
 });
 
 router.get("/:userId", async (req, res) => {
-  const user = await userService.find(req.params.userId);
+  try {
+    const user = await userService.find(req.params.userId);
+    if (!user) {
+      res.status(500).json(createResponse(500, "Veriler yüklenmedi"));
+    }
 
-  if (!user) return res.status(404).send("connot find user");
-  res.render("user", { user });
+    res.status(200).json(createResponse(200, "Başarılı", { user }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 router.patch("/:userId", async (req, res) => {
-  const { name } = req.body;
-
-  await userService.update(req.params.userId, { name });
-});
-
-router.post("/:userId/task", async (req, res) => {
-  const { userId } = req.params;
-  const { name, description, room, ownerId } = req.body;
-
-  const task = await userService.createTask(name, description, room, ownerId);
-
-  res.send(task);
-});
-
-router.post("/:userId/rooms", async (req, res) => {
-  const { name } = req.body;
-  const userId = req.params.userId;
-
-  const room = await userService.createRoom(name, userId);
-  res.send(room);
+  try {
+    const { name } = req.body;
+    await userService.update(req.params.userId, { name });
+    res.status(200).json(createResponse(200, "Başarılı"));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "İşlem başarısız oldu", {}, [error.message]));
+  }
 });
 
 module.exports = router;

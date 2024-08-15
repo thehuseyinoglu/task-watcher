@@ -1,41 +1,70 @@
+const authMiddleware = require("../middleware/auth-middleware");
 const { roomService } = require("../services");
 
 const router = require("express").Router();
 
-router.get("/", async (req, res) => {
-  const rooms = await roomService.load();
+router.use(authMiddleware);
 
-  res.render("rooms", { rooms });
+router.get("/", async (req, res) => {
+  try {
+    const rooms = await roomService.load();
+    res.status(200).json(createResponse(200, "Başarılı", { rooms }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 router.post("/", async (req, res) => {
-  const { name, ownerId} = req.body;
-  const room = await roomService.createRoom(name, ownerId);
-  res.send(room);
+  const { name, ownerId } = req.body;
+  const response = await roomService.createRoom(name, ownerId);
+  res.status(response.status).json(response);
 });
 
-router.post("/add-user",async(req,res)=>{
-  const {roomId,userId} = req.body
-  await roomService.addUserToRoom(roomId,userId)
+router.post("/add-user", async (req, res) => {
+  const { roomId, userId } = req.body;
+  const response = await roomService.addUserToRoom(roomId, userId);
 
-  res.send('ok')
-})
+  res.status(response.status).json(response);
+});
 
 router.delete("/:roomId", async (req, res) => {
-  await roomService.removeBy("_id", req.params.roomId); 
-  res.send("ok");
+  try {
+    await roomService.removeBy("_id", req.params.roomId);
+    res.status(200).json(createResponse(200, "Başarılı"));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "İşlem başarısız oldu", {}, [error.message]));
+  }
 });
 
 router.get("/:roomId", async (req, res) => {
-  const room = await roomService.find(req.params.roomId);
-  if (!room) return res.status(404).send("connot find room");
-  res.render("room", { room });
+  try {
+    const room = await roomService.find(req.params.roomId);
+    if (!room) {
+      res.status(500).json(createResponse(500, "Veriler yüklenmedi"));
+    }
+
+    res.status(200).json(createResponse(200, "Başarılı", { room }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 router.patch("/:roomId", async (req, res) => {
-  const { name } = req.body;
-
-  await roomService.update(req.params.roomId, { name });
+  try {
+    const { name } = req.body;
+    await roomService.update(req.params.roomId, { name });
+    res.status(200).json(createResponse(200, "Başarılı"));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "İşlem başarısız oldu", {}, [error.message]));
+  }
 });
 
 module.exports = router;

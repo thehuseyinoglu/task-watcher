@@ -8,8 +8,18 @@ const UserSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
-    required:true,
+    required: false,
     min: 10,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
   },
   rooms: [
     {

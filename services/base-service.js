@@ -31,6 +31,10 @@ class BaseService {
     return this.model.find(obj);
   }
 
+  async findOne(obj){
+    return await this.model.findOne(obj)
+  }
+
   async queryWithProjection(projection) {
     return await this.model.find({}, projection);
   }

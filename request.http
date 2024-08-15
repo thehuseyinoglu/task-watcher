@@ -1,11 +1,13 @@
 POST http://localhost:3000/users HTTP/1.1
 content-type: application/json
 
-{"name":"Yusuf","age":42}  
+{"name":"login","age":42,"email":"login@gmail.com","password":"1234567"}  
 
 ###
 
-GET http://localhost:3000/users/66b3270b7d4d129d0f84950e HTTP/1.1
+GET http://localhost:3000/users HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YmM5MWRjOGFjMDdlYTA4ZTY3ZDdkZSIsImlhdCI6MTcyMzY0MzQyNH0.DYS3-xOfz0oPeI41JmreQ6mGQCXxWb46P3A2_SLKsYk
+
 
 ###
 DELETE http://localhost:3000/users/66b9ae11e6dcaac9b419e5bd HTTP/1.1
@@ -14,7 +16,7 @@ DELETE http://localhost:3000/users/66b9ae11e6dcaac9b419e5bd HTTP/1.1
 PATCH http://localhost:3000/users/66b9e84e11006bc2188aaca8 HTTP/1.1
 content-type: application/json
 
-{"name": "yusuf besim"}
+{"name": "yusuf besim1"}
 ###
 
 PATCH http://localhost:3000/rooms/66b9ffb153f9a5c62c517e48 HTTP/1.1
@@ -29,8 +31,8 @@ content-type: application/json
 POST http://localhost:3000/tasks HTTP/1.1
 content-type: application/json
 
-{"name":"berkayın task", "description":"rap yapmak", 
-"room": "66b9ffb153f9a5c62c517e48","ownerId":"66b9e82f11006bc2188aaca2"}
+{"name":"yenimsi task", "description":"rap yapmak", 
+"room": "66b9ffb153f9a5c62c517e48","ownerId":"66bcb5b104b57f2e7dd7ce2f"}
 
 
 ###taskların hepsini getir
@@ -66,5 +68,21 @@ POST http://localhost:3000/rooms/add-user HTTP/1.1
 content-type: application/json
 
 {"roomId":"66b9ffb153f9a5c62c517e48","userId":"66b9e82511006bc2188aaca0"}
+
+###---------------------
+###Room
+POST http://localhost:3000/auth/register HTTP/1.1
+content-type: application/json
+
+{"name":"registerKayıt","email":"register@gmail.com","password":"1234567"}
+
+###---------------------
+
+
+###Room
+POST http://localhost:3000/auth/login HTTP/1.1
+content-type: application/json
+
+{"email":"register@gmail.com","password":"1234567"}
 
 ###---------------------

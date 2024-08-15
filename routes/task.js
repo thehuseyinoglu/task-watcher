@@ -1,44 +1,60 @@
+const authMiddleware = require("../middleware/auth-middleware");
 const { taskService } = require("../services");
 
 const router = require("express").Router();
 
+router.use(authMiddleware);
+
+
 router.get("/", async (req, res) => {
-  const tasks = await taskService.load();
-  res.render("tasks", { tasks });
+  try {
+    const tasks = await taskService.load();
+    res.status(200).json(createResponse(200, "Başarılı", { tasks }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 router.post("/", async (req, res) => {
   // const { userId } = req.params;
   const { name, description, room, ownerId } = req.body;
 
-  const task = await taskService.createTask(name, description, room, ownerId);
+  const response = await taskService.createTask(
+    name,
+    description,
+    room,
+    ownerId
+  );
 
-  res.send(task);
+  res.status(response.status).json(response);
 });
 
-router.get("/search", async (req, res) => {
-  const name = req.query.name;
-  const description = req.query.description;
-  
-  const query = {};
-  if (name) query.name = name;
-  if (description) query.description = description;
-
-  const tasks = await taskService.query(query);
-
-  res.send(tasks);
-});
-
-router.delete("/:taskId", async (req,res) => {
-  await taskService.removeBy("_id", req.params.taskId);
-
-  res.send("ok");
+router.delete("/:taskId", async (req, res) => {
+  try {
+    await taskService.removeBy("_id", req.params.taskId);
+    res.status(200).json(createResponse(200, "Başarılı"));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "İşlem başarısız oldu", {}, [error.message]));
+  }
 });
 
 router.get("/:taskId", async (req, res) => {
-  const task = await taskService.find(req.params.taskId);
-  if (!task) return res.status(404).send("connot find user");
-  res.render("task", { task });
+  try {
+    const task = await taskService.find(req.params.taskId);
+    if (!task) {
+      res.status(500).json(createResponse(500, "Veriler yüklenmedi"));
+    }
+
+    res.status(200).json(createResponse(200, "Başarılı", { task }));
+  } catch (error) {
+    res
+      .status(500)
+      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+  }
 });
 
 module.exports = router;
