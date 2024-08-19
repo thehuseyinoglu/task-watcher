@@ -1,7 +1,7 @@
 POST http://localhost:3000/users HTTP/1.1
 content-type: application/json
 
-{"name":"login","age":42,"email":"login@gmail.com","password":"1234567"}  
+{"name":"login","email":"login@gmail.com","password":"1234567"}  
 
 ###
 

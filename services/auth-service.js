@@ -4,6 +4,7 @@ const userService = require("./user-service");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const authSchemas = require("../validations/auth-schemas");
+const apiResponse = require("../utils/apiResponse");
 
 class AuthService extends BaseService {
   async login(email, password) {
@@ -78,13 +79,8 @@ class AuthService extends BaseService {
         },
       };
     } catch (err) {
-      return {
-        errors: [],
-        stack: "",
-        message: err.message,
-        success: false,
-        status: 500,
-      };
+      console.log(err);
+      return apiResponse.error(err.message, 422);
     }
   }
 }

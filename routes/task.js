@@ -1,4 +1,4 @@
-const authMiddleware = require("../middleware/auth-middleware");
+const authMiddleware = require("../middlewares/auth-middleware");
 const { taskService } = require("../services");
 
 const router = require("express").Router();

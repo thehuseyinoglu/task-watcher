@@ -1,12 +1,10 @@
-const authMiddleware = require("../middleware/auth-middleware");
+const authMiddleware = require("../middlewares/auth-middleware");
 const createResponse = require("../utils/response-helper");
 const { userService } = require("../services");
 
 const router = require("express").Router();
 
-router.use(authMiddleware);
-
-
+// router.use(authMiddleware);
 router.get("/", async (req, res) => {
   try {
     const users = await userService.load();
@@ -18,16 +16,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/young-users", async (req, res) => {
-  try {
-    const users = await userService.findYoungUsers();
-    res.status(200).json(createResponse(200, "Başarılı", { users }));
-  } catch (error) {
-    res
-      .status(500)
-      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
-  }
-});
+// router.get("/young-users", async (req, res) => {
+//   try {
+//     const users = await userService.findYoungUsers();
+//     res.status(200).json(createResponse(200, "Başarılı", { users }));
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+//   }
+// });
 
 router.get("/simple-name", async (req, res) => {
   try {
