@@ -19,10 +19,10 @@ content-type: application/json
 {"name": "yusuf besim1"}
 ###
 
-PATCH http://localhost:3000/rooms/66b9ffb153f9a5c62c517e48 HTTP/1.1
+PATCH http://localhost:3000/rooms/66c6e9d1a8ed614d80e09456 HTTP/1.1
 content-type: application/json
 
-{"name": "ambeleyav"}
+{"name": "isim değişti"} 
 
 
 # ----------
@@ -31,8 +31,8 @@ content-type: application/json
 POST http://localhost:3000/tasks HTTP/1.1
 content-type: application/json
 
-{"name":"yenimsi task", "description":"rap yapmak", 
-"room": "66b9ffb153f9a5c62c517e48","ownerId":"66bcb5b104b57f2e7dd7ce2f"}
+{"name":"besim odasına giriş tarzı", "description":"rap yapmak", 
+"room": "66c6e4b4a8ed614d80e093d9","ownerId":"66c5c6f607b3399eec2bf80e"}
 
 
 ###taskların hepsini getir
@@ -51,7 +51,7 @@ DELETE http://localhost:3000/tasks/66b9ffd053f9a5c62c517e5b HTTP/1.1
 POST http://localhost:3000/rooms HTTP/1.1
 content-type: application/json
 
-{"name":"Berkay's Room","ownerId":"66b9e82f11006bc2188aaca2"}
+{"name":"nazmiler Odası","ownerId":"66c5c6f607b3399eec2bf80e","color":"#9eeDDD"}
 
 ###rooms
 GET http://localhost:3000/rooms HTTP/1.1
@@ -63,11 +63,11 @@ GET http://localhost:3000/rooms/66b370a36f30023cdc9cd1f9 HTTP/1.1
 DELETE http://localhost:3000/rooms/66acd81396990c8b53d26b7e HTTP/1.1
 
 
-###Room
+###RoomAAAAA
 POST http://localhost:3000/rooms/add-user HTTP/1.1
 content-type: application/json
 
-{"roomId":"66b9ffb153f9a5c62c517e48","userId":"66b9e82511006bc2188aaca0"}
+{"roomId":"66cdcf777e3c6bfe416c051d","userId":"66c5c6f607b3399eec2bf80e"}
 
 ###---------------------
 ###Room

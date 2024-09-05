@@ -10,17 +10,22 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   password: {
     type: String,
     required: true,
     trim: true,
   },
+  profilePhoto: {
+    type: String,
+    required: false,
+  },
   rooms: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Room",
-      autopopulate: { maxDepth: 1 },
+      autopopulate: { maxDepth: 2 },
     },
   ],
   tasks: [

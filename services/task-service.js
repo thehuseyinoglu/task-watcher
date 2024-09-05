@@ -2,6 +2,8 @@ const BaseService = require("./base-service");
 const Task = require("../models/task");
 const userService = require("./user-service");
 const roomService = require("./room-service");
+const apiResponse = require("../utils/apiResponse");
+
 
 class TaskService extends BaseService {
   async createTask(name, description, roomId, ownerId) {
@@ -10,13 +12,12 @@ class TaskService extends BaseService {
       const room = await roomService.find(roomId);
 
       if (!taskOwner || !room) {
-        return {
-          errors: [],
-          stack: "",
-          message: "Task sahibi ve oda seçiniz",
-          success: false,
-          status: 500,
-        };
+        return apiResponse.error("Task sahibi ve oda seçiniz", 400);
+      }
+
+
+      if(!room.users?.some((item)=>item.id == taskOwner.id)){
+        return apiResponse.error("Kullanıcı bu odada değil", 400);
       }
 
       const task = await this.insert({
@@ -28,24 +29,9 @@ class TaskService extends BaseService {
       taskOwner.tasks.push(task);
       await taskOwner.save();
 
-      return {
-        errors: [],
-        stack: "",
-        message: "Task eklendi",
-        success: true,
-        status: 200,
-        data: {
-          task,
-        },
-      };
+      return apiResponse.success("Task eklendi").setData({ room: room });
     } catch (err) {
-      return {
-        errors: [],
-        stack: "",
-        message: err.message,
-        success: false,
-        status: 500,
-      };
+      return apiResponse.error(err.message, 500);
     }
   }
 }

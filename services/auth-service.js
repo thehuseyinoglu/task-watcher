@@ -13,35 +13,17 @@ class AuthService extends BaseService {
       const user = await userService.findOne({ email });
       const match = await bcrypt.compare(password, user.password);
 
-      if (!user || !match) {
-        return {
-          errors: [],
-          stack: "",
-          message: "Kullanıcı bilgileri yanlış",
-          success: false,
-          status: 500,
-        };
+      if (!match) {
+        return apiResponse.error("Kullanıcı bilgileri yanlış", 400);
       }
 
       const token = jwt.sign({ id: user.id }, process.env.SECRET_TOKEN);
-      return {
-        errors: [],
-        stack: "",
-        message: "Giriş başarılı",
-        success: true,
-        status: 200,
-        data: {
-          token,
-        },
-      };
+      return apiResponse
+        .success("Giriş başarılı")
+        .setData({ token: token, user: user });
     } catch (err) {
-      return {
-        errors: [],
-        stack: "",
-        message: err.message,
-        success: false,
-        status: 500,
-      };
+      console.log(err);
+      return apiResponse.error("Kullanıcı bilgileri yanlış", 500);
     }
   }
 
@@ -49,15 +31,8 @@ class AuthService extends BaseService {
     try {
       const user = await userService.findOne({ email });
       if (user) {
-        return {
-          errors: [],
-          stack: "",
-          message: "Kullanıcı sistemde kayıtlı",
-          success: false,
-          status: 500,
-        };
+        return apiResponse.error("Kullanıcı sistemde kayıtlı", 500);
       }
-
       await authSchemas.register.validateAsync({ email, name, password });
       const passwordHash = await bcrypt.hash(password, 12);
       const newUser = await userService.insert({
@@ -66,21 +41,11 @@ class AuthService extends BaseService {
         email,
         password: passwordHash,
       });
-      const token = jwt.sign({ id: newUser.id }, process.env.SECRET_TOKEN);
 
-      return {
-        errors: [],
-        stack: "",
-        message: "Hesap oluşturuldu",
-        success: true,
-        status: 200,
-        data: {
-          token,
-        },
-      };
+
+      return apiResponse.success("Hesap oluşturuldu")
     } catch (err) {
-      console.log(err);
-      return apiResponse.error(err.message, 422);
+      return apiResponse.error(err.message, 500);
     }
   }
 }

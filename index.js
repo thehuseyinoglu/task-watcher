@@ -19,12 +19,8 @@ app.set("view engine", "pug");
 app.use(bodyParser.json()); // gönderilen isteğin okunabilmesi için gerekli bir durum yoksa express okumuyor
 app.use(cors());
 
-const errorHandler = new CustomErrorHandler();
-app.use((err, req, res, next) => {
-  errorHandler.error(err, req, res, next);
-});
-
-
+app.use(bodyParser.json({ limit: '20mb' }));
+app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -35,3 +31,4 @@ app.use("/auth",authRouter)
 app.listen(3000, () => {
   console.log("started");
 });
+ 

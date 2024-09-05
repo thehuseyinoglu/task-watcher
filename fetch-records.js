@@ -9,7 +9,6 @@ async function main() {
 
     const room1 = await roomService.findBy("name", "Room1");
 
-    console.log(room1);
   } catch (error) {
     return console.log(error);
   }

@@ -6,13 +6,15 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const response = await authService.login(email, password);
-  res.status(response.status).json(response);
+
+  res.send(response);
 });
 
 router.post("/register", async (req, res) => {
   const { name, email, age, password } = req.body;
+
   const response = await authService.register(name, email, age, password);
-  res.status(200).json(response);
+  res.send(response);
 });
 
 module.exports = router;

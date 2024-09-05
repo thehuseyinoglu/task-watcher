@@ -1,45 +1,28 @@
 const BaseService = require("./base-service");
 const Room = require("../models/room");
 const userService = require("./user-service");
+const apiResponse = require("../utils/apiResponse");
 
 class RoomService extends BaseService {
-  async createRoom(name, ownerId) {
+  async createRoom(name, ownerId, color) {
     try {
       const owner = await userService.find(ownerId);
 
-      if (!owner || !room) {
-        return {
-          errors: [],
-          stack: "",
-          message: "Kişi bulunamadı",
-          success: false,
-          status: 500,
-        };
+      if (!owner) {
+        return apiResponse.error("Kullanıcı bulunamadı", 400);
       }
 
-      const room = await this.insert({ name, owner });
+      const room = await this.insert({ name, owner, color });
+
+      room.users.push(owner);
+      await room.save();
 
       owner.rooms.push(room);
       await owner.save();
 
-      return {
-        errors: [],
-        stack: "",
-        message: "Oda eklendi",
-        success: true,
-        status: 200,
-        data: {
-          task,
-        },
-      };
+      return apiResponse.success("Oda eklendi").setData({ room: room });
     } catch (err) {
-      return {
-        errors: [],
-        stack: "",
-        message: err.message,
-        success: false,
-        status: 500,
-      };
+      return apiResponse.error(err.message, 500);
     }
   }
 
@@ -48,36 +31,25 @@ class RoomService extends BaseService {
       const room = await this.find(roomId);
       const user = await userService.find(userId);
 
+      if (room.users.some((item) => item._id.toString() == user._id)) {
+        return apiResponse.error("Kullanıcı zaten odada kayıtlı ", 500);
+      }
+
       if (!user || !room) {
-        return {
-          errors: [],
-          stack: "",
-          message: "Kişi veya oda bulunamadı",
-          success: false,
-          status: 500,
-        };
+        return apiResponse.error("Kişi veya oda bulunamadı", 500);
       }
 
       room.users.push(user);
+      user.rooms.push(room);
+
+      await user.save();
       await room.save();
-      return {
-        errors: [],
-        stack: "",
-        message: "Oda eklendi",
-        success: true,
-        status: 200,
-        data: {
-          task,
-        },
-      };
+
+      return apiResponse
+        .success("Kullanıcı odaya eklendi")
+        .setData({ room: room });
     } catch (err) {
-      return {
-        errors: [],
-        stack: "",
-        message: err.message,
-        success: false,
-        status: 500,
-      };
+      return apiResponse.error(err.message, 500);
     }
   }
 }

@@ -1,10 +1,11 @@
 const authMiddleware = require("../middlewares/auth-middleware");
 const { taskService } = require("../services");
+const createResponse = require("../utils/response-helper");
+
 
 const router = require("express").Router();
 
-router.use(authMiddleware);
-
+// router.use(authMiddleware);
 
 router.get("/", async (req, res) => {
   try {
@@ -28,7 +29,7 @@ router.post("/", async (req, res) => {
     ownerId
   );
 
-  res.status(response.status).json(response);
+  res.send(response);
 });
 
 router.delete("/:taskId", async (req, res) => {
@@ -41,6 +42,7 @@ router.delete("/:taskId", async (req, res) => {
       .json(createResponse(500, "İşlem başarısız oldu", {}, [error.message]));
   }
 });
+
 
 router.get("/:taskId", async (req, res) => {
   try {

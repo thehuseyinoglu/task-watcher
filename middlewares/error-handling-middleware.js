@@ -30,13 +30,6 @@ class CustomErrorHandler {
     }
 
     // Append stack
-    if (
-      error.stack &&
-      process.env.NODE_ENV === "development" &&
-      responseObject.getStatus() == 500
-    ) {
-      responseObject.setStack(error.stack);
-    }
 
     // Final response
     res.json(responseObject);

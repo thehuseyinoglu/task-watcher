@@ -12,15 +12,16 @@ const authSchemas = {
         "any.required": "Email alanı zorunludur",
       }),
     password: Joi.string()
-      .required()
+      .required().min(6)
       .messages({
+        "string.min": "Şifre en az 6 karakter olmalıdır.",
         "any.required": "Şifre alanı zorunludur",
       }),
   }),
 
   register: Joi.object({
     name: Joi.string().min(3).required().messages({
-      "string.min": "En az 3 karakter olmalıdır.",
+      "string.min": "İsim en az 3 karakter olmalıdır.",
       "any.required": "İsim alanı zorunludur",
     }),
     email: Joi.string()
@@ -31,12 +32,13 @@ const authSchemas = {
       .required()
       .messages({
         "string.email": "Geçerli bir e-posta adresi girin",
-        "any.required": "Email alanı zorunludur",
+        "any.required": "E-posta alanı zorunludur",
       }),
 
     password: Joi.string()
-      .required()
+      .required().min(6)
       .messages({
+        "string.min": "Şifre en az 6 karakter olmalıdır.",
         "any.required": "Şifre alanı zorunludur",
       }),
   }),

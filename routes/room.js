@@ -1,32 +1,32 @@
 const authMiddleware = require("../middlewares/auth-middleware");
 const { roomService } = require("../services");
+const createResponse = require("../utils/response-helper");
 
 const router = require("express").Router();
 
-router.use(authMiddleware);
+// router.use(authMiddleware);
 
 router.get("/", async (req, res) => {
   try {
     const rooms = await roomService.load();
-    res.status(200).json(createResponse(200, "Başarılı", { rooms }));
+    res.send(rooms)
   } catch (error) {
-    res
-      .status(500)
-      .json(createResponse(500, "Veriler yüklenmedi", {}, [error.message]));
+    res.send(error);
   }
 });
 
 router.post("/", async (req, res) => {
-  const { name, ownerId } = req.body;
-  const response = await roomService.createRoom(name, ownerId);
-  res.status(response.status).json(response);
+  const { name, ownerId, color } = req.body;
+  const response = await roomService.createRoom(name, ownerId, color);
+
+  res.send(response);
 });
 
 router.post("/add-user", async (req, res) => {
   const { roomId, userId } = req.body;
   const response = await roomService.addUserToRoom(roomId, userId);
 
-  res.status(response.status).json(response);
+  res.send(response);
 });
 
 router.delete("/:roomId", async (req, res) => {
